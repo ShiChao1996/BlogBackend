@@ -39,6 +39,13 @@ exports.bodyParser = {
   jsonLimit: '10mb',
 };
 
+exports.security = {
+  ignore: '/',
+  csrf: {
+    ignoreJSON: true,
+  },
+};
+
 exports.mongoose = {
   url: 'mongodb://10.0.0.253:27020/blog',
   options: {},

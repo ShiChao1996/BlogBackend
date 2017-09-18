@@ -24,28 +24,32 @@
 
 /*
  * Revision History:
- *     Initial: 2017/09/18       ShiChao
+ *     Initial: 2017/09/18        ShiChao
  */
 
 'use strict';
 
 module.exports = app => {
-  const mongo = app.mongoose;
-  const ArticleSchema = new mongo.Schema({
-    tag: [{ type: String }],
-    content: { type: String },
-    date: { type: Date, default: Date.now },
-    title: String,
-    author: String,
-    body: String,
-    comments: [{ body: String, date: Date }],
-    hidden: Boolean,
-    meta: {
-      votes: Number,
-      favs: Number,
-    },
-    original: { type: Boolean },
-  });
+  class ArticleService extends app.Service {
+    * update(req) {
+      try {
+        yield this.ctx.model.Articles.create(req);
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+      return true;
+    }
 
-  return mongo.model('articles', ArticleSchema, 'articles');
+    * getList() {
+      try {
+        return yield this.ctx.model.Articles.find({});
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
+  }
+
+  return ArticleService;
 };
