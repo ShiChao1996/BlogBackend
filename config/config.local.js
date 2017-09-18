@@ -24,29 +24,27 @@
 
 /*
  * Revision History:
- *     Initial: 2017/09/18       ShiChao
+ *     Initial: 2017/09/18        ShiChao
  */
 
 'use strict';
 
-// had enabled by egg
-// exports.static = true;
-exports.validate = {
+exports.jwt = {
+  secret: 'user',
   enable: true,
-  package: 'egg-validate',
+  ignore: '/',
 };
 
-exports.jwt = {
-  enable: true,
-  package: 'egg-jwt',
+exports.bodyParser = {
+  jsonLimit: '10mb',
 };
 
 exports.mongoose = {
-  enable: true,
-  package: 'egg-mongoose',
+  url: 'mongodb://10.0.0.253:27020/blog',
+  options: {},
 };
 
 exports.cors = {
-  enable: true,
-  package: 'egg-cors',
+  origin: '*',
+  allowMethods: 'GET,POST',
 };

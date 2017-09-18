@@ -29,24 +29,13 @@
 
 'use strict';
 
-// had enabled by egg
-// exports.static = true;
-exports.validate = {
-  enable: true,
-  package: 'egg-validate',
-};
+module.exports = app => {
+  const mongo = app.mongoose;
+  const ArticleSchema = new mongo.Schema({
+    tag: { type: String },
+    content: { type: String },
+    time: { type: Date },
+  });
 
-exports.jwt = {
-  enable: true,
-  package: 'egg-jwt',
-};
-
-exports.mongoose = {
-  enable: true,
-  package: 'egg-mongoose',
-};
-
-exports.cors = {
-  enable: true,
-  package: 'egg-cors',
+  return mongo.model('articles', ArticleSchema, 'articles');
 };
