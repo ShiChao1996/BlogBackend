@@ -32,11 +32,11 @@
 module.exports = app => {
   class ArticleController extends app.Controller {
 
-    * update() {
+    * upsert() {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
-      const res = yield ctx.service.article.update(ctx.request.body);
+      const res = yield ctx.service.article.upsert(ctx.request.body);
       if (res) {
         ctx.body = formatSucceedResp();
       } else {
@@ -59,9 +59,20 @@ module.exports = app => {
     * getDetail() {
       const { ctx } = this;
       const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
-      const res = yield ctx.service.fodderOrder.getUnconfirmed();
+      const res = yield ctx.service.article.getDetail(ctx.request.body);
       if (res) {
         ctx.body = formatSucceedResp(res);
+      } else {
+        ctx.body = formatErrorResp(error.Mysql);
+      }
+    }
+
+    * remove() {
+      const { ctx } = this;
+      const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
+      const res = yield ctx.service.article.remove(ctx.request.body);
+      if (res) {
+        ctx.body = formatSucceedResp();
       } else {
         ctx.body = formatErrorResp(error.Mysql);
       }

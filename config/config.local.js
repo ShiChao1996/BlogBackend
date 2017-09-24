@@ -47,7 +47,7 @@ exports.security = {
 };
 
 exports.mongoose = {
-  url: 'mongodb://10.0.0.253:27020/blog',
+  url: 'mongodb://47.95.229.232:27017/blog',
   options: {},
 };
 

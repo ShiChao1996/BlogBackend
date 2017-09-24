@@ -32,7 +32,7 @@
 module.exports = app => {
   const mongo = app.mongoose;
   const ArticleSchema = new mongo.Schema({
-    tag: [{ type: String }],
+    tags: [{ type: String }],
     content: { type: String },
     date: { type: Date, default: Date.now },
     title: String,

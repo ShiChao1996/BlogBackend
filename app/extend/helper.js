@@ -112,5 +112,18 @@ module.exports = {
     const time = new Date(date).getTime();
     console.log(now - time - expire * 60 * 1000);
     return now - time - expire * 60 * 1000 > 0;
+  },
+
+  copyAttr(target, source, cover) {
+    for (const attr in source) {
+      if (source.hasOwnProperty(attr)) {
+        if (!target.hasOwnProperty(attr)) {
+          target[ attr ] = source[ attr ];
+        } else if (cover) {
+          target[ attr ] = source[ attr ];
+        }
+      }
+    }
+    return target;
   }
 };

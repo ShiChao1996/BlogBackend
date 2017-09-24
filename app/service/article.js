@@ -31,8 +31,15 @@
 
 module.exports = app => {
   class ArticleService extends app.Service {
-    * update(req) {
+    * upsert(req) {
+      const { copyAttr } = this.ctx.helper;
       try {
+        const article = yield this.ctx.model.Articles.findOne({ _id: req._id });
+        if (article) {
+          copyAttr(article, req, true);
+          article.save();
+          return true;
+        }
         yield this.ctx.model.Articles.create(req);
       } catch (e) {
         this.ctx.logger.error(e);
@@ -44,6 +51,25 @@ module.exports = app => {
     * getList() {
       try {
         return yield this.ctx.model.Articles.find({});
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
+
+    * remove(req) {
+      try {
+        yield this.ctx.model.Articles.findOneAndRemove({ _id: req.id });
+        return true;
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
+
+    * getDetail(req) {
+      try {
+        return yield this.ctx.model.Articles.findOne({ _id: req.id });
       } catch (e) {
         this.ctx.logger.error(e);
         return false;
