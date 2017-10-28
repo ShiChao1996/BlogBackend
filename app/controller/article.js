@@ -31,6 +31,9 @@
 
 module.exports = app => {
   class ArticleController extends app.Controller {
+    * upload() {
+      console.log(this.ctx.request.body);
+    }
 
     * upsert() {
       const { ctx } = this;
@@ -47,8 +50,9 @@ module.exports = app => {
     * getList() {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
+      const { index } = ctx.request.body;
 
-      const res = yield ctx.service.article.getList();
+      const res = yield ctx.service.article.getList(index);
       if (res) {
         ctx.body = formatSucceedResp(res);
       } else {

@@ -29,30 +29,33 @@
 
 'use strict';
 
-exports.jwt = {
-  secret: 'user',
-  enable: true,
-  ignore: '/',
-};
+module.exports = app => {
+  class TagsService extends app.Service {
+    * getTags() {
+      try {
+        return yield this.ctx.model.ArticleTags.findOne({});
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
 
-exports.bodyParser = {
-  jsonLimit: '10mb',
-};
+    * updateTags(tags) {
+      try {
+        const record = yield this.ctx.model.ArticleTags.findOne({});
+        if (!record) {
+          yield this.ctx.model.ArticleTags.create({ tags });
+          return;
+        }
+        const oldTags = record.tags.concat(tags);
+        record.tags = Array.from(new Set(oldTags));
+        record.save();
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return [];
+      }
+    }
+  }
 
-exports.security = {
-  ignore: '/',
-  csrf: {
-    ignoreJSON: true,
-  },
-};
-
-exports.mongoose = {
-  // url: 'mongodb://47.95.229.232:27017/blog',
-  options: {},
-  url: 'mongodb://127.0.0.1:27017/blog',
-};
-
-exports.cors = {
-  origin: '*',
-  allowMethods: 'GET,POST',
+  return TagsService;
 };

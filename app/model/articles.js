@@ -34,6 +34,7 @@ module.exports = app => {
   const ArticleSchema = new mongo.Schema({
     tags: [{ type: String }],
     content: { type: String },
+    image: String,
     date: { type: Date, default: Date.now },
     title: String,
     author: String,

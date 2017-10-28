@@ -4,7 +4,7 @@
  * Copyright (c) 2017 ShiChao Co,Ltd..
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the 'Software'), to deal
+ * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -24,35 +24,25 @@
 
 /*
  * Revision History:
- *     Initial: 2017/09/18        ShiChao
+ *     Initial: 2017/10/28        ShiChao
  */
 
 'use strict';
 
-exports.jwt = {
-  secret: 'user',
-  enable: true,
-  ignore: '/',
-};
+module.exports = app => {
+  class TagsController extends app.Controller {
+    * getTags() {
+      const { ctx } = this;
+      const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
-exports.bodyParser = {
-  jsonLimit: '10mb',
-};
+      const res = yield ctx.service.tags.getTags();
+      if (res) {
+        ctx.body = formatSucceedResp(res);
+      } else {
+        ctx.body = formatErrorResp(error.Mongo);
+      }
+    }
+  }
 
-exports.security = {
-  ignore: '/',
-  csrf: {
-    ignoreJSON: true,
-  },
-};
-
-exports.mongoose = {
-  // url: 'mongodb://47.95.229.232:27017/blog',
-  options: {},
-  url: 'mongodb://127.0.0.1:27017/blog',
-};
-
-exports.cors = {
-  origin: '*',
-  allowMethods: 'GET,POST',
+  return TagsController;
 };

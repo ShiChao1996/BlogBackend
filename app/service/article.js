@@ -48,7 +48,17 @@ module.exports = app => {
       return true;
     }
 
-    * getList() {
+    * getList(index) {
+      try {
+        const res = yield this.ctx.model.Articles.find({});
+        return res.slice(index * 10, index * 10 + 9);
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
+
+    * getAll() {
       try {
         return yield this.ctx.model.Articles.find({});
       } catch (e) {
