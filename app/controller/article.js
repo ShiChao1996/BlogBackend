@@ -60,6 +60,19 @@ module.exports = app => {
       }
     }
 
+    * getAll() {
+      const { ctx } = this;
+      const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
+
+      console.log('fgsgdfdg')
+      const res = yield ctx.service.article.getAll();
+      if (res) {
+        ctx.body = formatSucceedResp(res);
+      } else {
+        ctx.body = formatErrorResp(error.Mongo);
+      }
+    }
+
     * getDetail() {
       const { ctx } = this;
       const { error, formatErrorResp, formatSucceedResp } = ctx.helper;

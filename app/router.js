@@ -6,6 +6,7 @@ module.exports = app => {
   app.post('/article/remove', 'article.remove');
   app.post('/article/getlist', 'article.getList');
   app.post('/article/getdetail', 'article.getDetail');
+  app.get('/article/getall', 'article.getAll');
   app.get('/article/gettags', 'tags.getTags');
 
   app.post('/flutter/articles/upsert', 'flutter.upsert');
