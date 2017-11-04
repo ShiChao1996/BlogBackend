@@ -39,7 +39,18 @@ module.exports = app => {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
-      const res = yield ctx.service.article.upsert(ctx.request.body);
+      const id = ctx.request.body._id;
+      if (!id) {
+        ctx.body = formatErrorResp(error.InvalidRequest);
+        return;
+      }
+      const exist = yield ctx.service.article.getById(id);
+      let res;
+      if (exist) {
+        res = yield ctx.service.article.update(ctx.request.body);
+      } else {
+        res = yield ctx.service.article.insert(ctx.request.body);
+      }
       if (res) {
         ctx.body = formatSucceedResp();
       } else {
@@ -64,7 +75,7 @@ module.exports = app => {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
-      console.log('fgsgdfdg')
+      console.log('fgsgdfdg');
       const res = yield ctx.service.article.getAll();
       if (res) {
         ctx.body = formatSucceedResp(res);

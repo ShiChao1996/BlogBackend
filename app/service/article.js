@@ -31,18 +31,57 @@
 
 module.exports = app => {
   class ArticleService extends app.Service {
-    * upsert(req) {
-      const { copyAttr } = this.ctx.helper;
+    * update(req) {
+      const { save, unlink } = this.ctx.service.picture;
+      const { content, title, tags, image, comments, _id } = req;
+      let oldPic;
+      let picPath;
+
       try {
-        const article = yield this.ctx.model.Articles.findOne({ _id: req._id });
-        if (article) {
-          copyAttr(article, req, true);
-          article.save();
-          return true;
+        const article = yield this.ctx.model.Articles.findOne({ _id });
+        const articleContent = yield this.ctx.model.ArticleContent.findOne({ _id: article.contentId });
+        if (image) {
+          picPath = yield save(image);
+          oldPic = article.image;
         }
-        yield this.ctx.model.Articles.create(req);
-      } catch (e) {
-        this.ctx.logger.error(e);
+        article.title = title;
+        article.image = picPath;
+        article.tags = tags;
+
+        articleContent.comments = comments;
+        articleContent.content = content;
+        article.save();
+        articleContent.save();
+        yield unlink(oldPic);
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+      return true;
+    }
+
+    * insert(req) {
+      const { save, unlink } = this.ctx.service.picture;
+      const { content, title, tags, image, comments } = req;
+      let picPath;
+      try {
+        if (image) {
+          picPath = yield save(image);
+        }
+        const articleContent = yield this.ctx.model.ArticleContent.create({
+          content,
+          comments,
+        });
+        console.log(articleContent);
+        this.ctx.model.Articles.create({
+          title,
+          tags,
+          image: picPath,
+          contentId: articleContent._id,
+        });
+      } catch (err) {
+        yield unlink(picPath);
+        console.log(err);
         return false;
       }
       return true;
@@ -56,6 +95,11 @@ module.exports = app => {
         this.ctx.logger.error(e);
         return false;
       }
+    }
+
+    * getById(_id) {
+      const article = yield this.ctx.model.Articles.findOne({ _id });
+      return !!article;
     }
 
     * getAll() {

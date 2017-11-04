@@ -33,7 +33,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 // TODO:
-const savePicPath = '/Users/Desktop/Images/'; // '/upload/images/';
+const savePicPath = '/Users/lovae/Desktop/Images/'; // '/upload/images/';
 let increamentId = 1;
 
 function createFolder(path) {
@@ -94,7 +94,7 @@ module.exports = app => {
       return savePicPath;
     }
 
-    * save(type, image, suffix = 'jpg') {
+    * save(image, suffix = 'jpg') {
       const basePath = savePicPath;
       createFolder(basePath);
       const path = basePath + uniqueName() + '.' + suffix;
