@@ -33,19 +33,14 @@ module.exports = app => {
   const mongo = app.mongoose;
   const ArticleSchema = new mongo.Schema({
     tags: [{ type: String }],
-    content: { type: String },
+    contentId: { type: String },
     image: String,
     date: { type: Date, default: Date.now },
     title: String,
-    author: String,
-    body: String,
-    comments: [{ body: String, date: Date }],
-    hidden: Boolean,
     meta: {
       votes: Number,
       favs: Number,
     },
-    original: { type: Boolean },
   });
 
   return mongo.model('articles', ArticleSchema, 'articles');

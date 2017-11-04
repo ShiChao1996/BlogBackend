@@ -114,9 +114,9 @@ module.exports = {
     return now - time - expire * 60 * 1000 > 0;
   },
 
-  copyAttr(target, source, cover) {
+  copyAttr(target, source, cover, ...except) {
     for (const attr in source) {
-      if (source.hasOwnProperty(attr)) {
+      if (source.hasOwnProperty(attr) && !except.includes(attr)) {
         if (!target.hasOwnProperty(attr)) {
           target[ attr ] = source[ attr ];
         } else if (cover) {

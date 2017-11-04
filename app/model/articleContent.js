@@ -24,35 +24,19 @@
 
 /*
  * Revision History:
- *     Initial: 2017/09/18        ShiChao
+ *     Initial: 2017/11/03       ShiChao
  */
 
 'use strict';
 
-exports.jwt = {
-  secret: 'user',
-  enable: true,
-  ignore: '/',
-};
+module.exports = app => {
+  const mongo = app.mongoose;
+  const ArticleContentSchema = new mongo.Schema({
+    content: { type: String },
+    comments: [
+      { body: String, date: String },
+    ],
+  });
 
-exports.bodyParser = {
-  jsonLimit: '10mb',
-};
-
-exports.security = {
-  ignore: '/',
-  csrf: {
-    ignoreJSON: true,
-  },
-};
-
-exports.mongoose = {
-  // url: 'mongodb://47.95.229.232:27017/blog',
-  options: {},
-  url: 'mongodb://127.0.0.1:27017/blog',
-};
-
-exports.cors = {
-  origin: '*',
-  allowMethods: 'GET,POST',
+  return mongo.model('articleContent', ArticleContentSchema, 'articleContent');
 };
