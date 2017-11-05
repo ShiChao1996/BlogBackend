@@ -40,10 +40,6 @@ module.exports = app => {
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
       const id = ctx.request.body._id;
-      if (!id) {
-        ctx.body = formatErrorResp(error.InvalidRequest);
-        return;
-      }
       const exist = yield ctx.service.article.getById(id);
       let res;
       if (exist) {
@@ -58,12 +54,12 @@ module.exports = app => {
       }
     }
 
-    * getList() {
+    * getSlice() {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
       const { index } = ctx.request.body;
 
-      const res = yield ctx.service.article.getList(index);
+      const res = yield ctx.service.article.getSlice(index);
       if (res) {
         ctx.body = formatSucceedResp(res);
       } else {
@@ -88,6 +84,18 @@ module.exports = app => {
       const { ctx } = this;
       const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
       const res = yield ctx.service.article.getDetail(ctx.request.body);
+      if (res) {
+        ctx.body = formatSucceedResp(res);
+      } else {
+        ctx.body = formatErrorResp(error.Mysql);
+      }
+    }
+
+    * getContentById() {
+      const { ctx } = this;
+      const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
+      const res = yield ctx.service.article.getContentById(ctx.request.body);
+      console.log(res)
       if (res) {
         ctx.body = formatSucceedResp(res);
       } else {

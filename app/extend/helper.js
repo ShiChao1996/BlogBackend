@@ -125,5 +125,5 @@ module.exports = {
       }
     }
     return target;
-  }
+  },
 };

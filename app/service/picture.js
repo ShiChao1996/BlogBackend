@@ -33,7 +33,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 // TODO:
-const savePicPath = '/Users/lovae/Desktop/Images/'; // '/upload/images/';
+const savePicPath = '/upload/images/'; // '/Users/lovae/Desktop/Images/';
 let increamentId = 1;
 
 function createFolder(path) {

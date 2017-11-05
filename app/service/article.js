@@ -32,6 +32,7 @@
 module.exports = app => {
   class ArticleService extends app.Service {
     * update(req) {
+      console.log('update!!!');
       const { save, unlink } = this.ctx.service.picture;
       const { content, title, tags, image, comments, _id } = req;
       let oldPic;
@@ -39,7 +40,7 @@ module.exports = app => {
 
       try {
         const article = yield this.ctx.model.Articles.findOne({ _id });
-        const articleContent = yield this.ctx.model.ArticleContent.findOne({ _id: article.contentId });
+        let articleContent;
         if (image) {
           picPath = yield save(image);
           oldPic = article.image;
@@ -48,11 +49,16 @@ module.exports = app => {
         article.image = picPath;
         article.tags = tags;
 
-        articleContent.comments = comments;
-        articleContent.content = content;
+        if (content) {
+          articleContent = yield this.ctx.model.ArticleContent.findOne({ _id: article.contentId });
+          articleContent.comments = comments;
+          articleContent.content = content;
+        }
         article.save();
-        articleContent.save();
-        yield unlink(oldPic);
+        articleContent && articleContent.save();
+        if (oldPic) {
+          yield unlink(oldPic);
+        }
       } catch (err) {
         console.log(err);
         return false;
@@ -61,6 +67,7 @@ module.exports = app => {
     }
 
     * insert(req) {
+      console.log('insert!!!');
       const { save, unlink } = this.ctx.service.picture;
       const { content, title, tags, image, comments } = req;
       let picPath;
@@ -87,10 +94,13 @@ module.exports = app => {
       return true;
     }
 
-    * getList(index) {
+    * getSlice(index) {
       try {
         const res = yield this.ctx.model.Articles.find({});
-        return res.slice(index * 10, index * 10 + 9);
+        const ret = {};
+        ret.length = res.length;
+        ret.list = res.slice(index * 10, index * 10 + 9);
+        return ret;
       } catch (e) {
         this.ctx.logger.error(e);
         return false;
@@ -109,6 +119,15 @@ module.exports = app => {
         this.ctx.logger.error(e);
         return false;
       }
+    }
+
+    * getContentById(req) {
+      try {
+        return yield this.ctx.model.ArticleContent.findOne({ _id: req._id });
+      } catch (err) {
+        this.ctx.logger.error(err);
+      }
+      return false;
     }
 
     * remove(req) {

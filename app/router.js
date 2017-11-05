@@ -4,7 +4,8 @@ module.exports = app => {
   app.post('/admin/login', 'admin.login');
   app.post('/article/upsert', 'article.upsert');
   app.post('/article/remove', 'article.remove');
-  app.post('/article/getlist', 'article.getList');
+  app.post('/article/getslice', 'article.getSlice');
+  app.post('/article/getcontent', 'article.getContentById');
   app.post('/article/getdetail', 'article.getDetail');
   app.get('/article/getall', 'article.getAll');
   app.get('/article/gettags', 'tags.getTags');
