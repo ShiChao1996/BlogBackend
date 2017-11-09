@@ -9,6 +9,7 @@ module.exports = app => {
   app.post('/article/getdetail', 'article.getDetail');
   app.get('/article/getall', 'article.getAll');
   app.get('/article/gettags', 'tags.getTags');
+  app.post('/article/getbytag', 'article.getByTag');
 
   app.post('/flutter/articles/upsert', 'flutter.upsert');
   app.post('upload', 'article.upload');

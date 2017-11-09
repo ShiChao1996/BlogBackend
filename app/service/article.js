@@ -148,6 +148,16 @@ module.exports = app => {
         return false;
       }
     }
+
+    * getByTag(req) {
+      const { tag } = req;
+      try {
+        return yield this.ctx.model.Articles.find({ tags: tag });
+      } catch (e) {
+        this.ctx.logger.error(e);
+        return false;
+      }
+    }
   }
 
   return ArticleService;

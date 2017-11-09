@@ -103,6 +103,17 @@ module.exports = app => {
       }
     }
 
+    * getByTag() {
+      const { ctx } = this;
+      const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
+      const res = yield ctx.service.article.getByTag(ctx.request.body);
+      if (res) {
+        ctx.body = formatSucceedResp(res);
+      } else {
+        ctx.body = formatErrorResp(error.Mysql);
+      }
+    }
+
     * remove() {
       const { ctx } = this;
       const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
