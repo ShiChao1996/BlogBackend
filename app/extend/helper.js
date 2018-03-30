@@ -126,4 +126,9 @@ module.exports = {
     }
     return target;
   },
+
+  validatePath(path) {
+    const length = 39;
+    return path.length === length && path.startsWith('/upload/image');
+  },
 };

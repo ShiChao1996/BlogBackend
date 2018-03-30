@@ -33,7 +33,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 // TODO:
-const savePicPath = '/upload/images/'; // '/Users/lovae/Desktop/Images/';
+const savePicPath = '/Users/lovae/Desktop/Images/'; // /upload/images/'; // '/Users/lovae/Desktop/Images/';
 let increamentId = 1;
 
 function createFolder(path) {
@@ -47,8 +47,8 @@ function saveAsync(imgData, picUrl) {
   const base64Data = imgData.replace(/^data:image\/\w+;base64,/, '');
   const dataBuffer = new Buffer(base64Data, 'base64');
 
-  return new Promise(function(resolve, reject) {
-    fs.writeFile(picUrl, dataBuffer, function(err) {
+  return new Promise(function (resolve, reject) {
+    fs.writeFile(picUrl, dataBuffer, function (err) {
       if (err) reject(err);
       resolve();
     });
@@ -65,6 +65,18 @@ function delAsync(filePath) {
     });
   }
   return {};
+}
+
+function readAsync(dir) {
+  return new Promise(function(resolve, reject) {
+    fs.readdir(dir, (err, files) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(files);
+    });
+  });
 }
 
 function uniqueName() {
@@ -106,6 +118,10 @@ module.exports = app => {
       if (path !== undefined) {
         delAsync(path);
       }
+    }
+
+    * read() {
+      return readAsync(savePicPath);
     }
   }
 

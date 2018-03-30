@@ -11,6 +11,10 @@ module.exports = app => {
   app.get('/article/gettags', 'tags.getTags');
   app.post('/article/getbytag', 'article.getByTag');
 
+  app.post('/image/post', 'imageServer.post');
+  app.get('/image/list', 'imageServer.list');
+  app.post('/image/delete', 'imageServer.remove');
+
   app.post('/flutter/articles/upsert', 'flutter.upsert');
   app.post('upload', 'article.upload');
   app.get('/flutter/articles/list', 'flutter.list');

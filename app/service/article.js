@@ -32,7 +32,6 @@
 module.exports = app => {
   class ArticleService extends app.Service {
     * update(req) {
-      console.log('update!!!');
       const { save, unlink } = this.ctx.service.picture;
       const { content, title, tags, image, comments, _id } = req;
       let oldPic;
@@ -67,7 +66,6 @@ module.exports = app => {
     }
 
     * insert(req) {
-      console.log('insert!!!');
       const { save, unlink } = this.ctx.service.picture;
       const { content, title, tags, image, comments } = req;
       let picPath;
@@ -79,7 +77,6 @@ module.exports = app => {
           content,
           comments,
         });
-        console.log(articleContent);
         this.ctx.model.Articles.create({
           title,
           tags,
@@ -141,8 +138,16 @@ module.exports = app => {
     }
 
     * getDetail(req) {
+      const { copyAttr } = this.ctx.helper;
       try {
-        return yield this.ctx.model.Articles.findOne({ _id: req.id });
+        const article = yield this.ctx.model.Articles.findOne({ _id: req._id });
+        if (!article) return false;
+        const content = yield this.ctx.model.ArticleContent.findOne({ _id: article.contentId });
+        let art = {
+          content: content.content,
+        };
+        art = copyAttr(art, article._doc);
+        return art;
       } catch (e) {
         this.ctx.logger.error(e);
         return false;

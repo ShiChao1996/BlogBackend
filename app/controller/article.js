@@ -71,7 +71,6 @@ module.exports = app => {
       const { ctx } = this;
       const { error, formatSucceedResp, formatErrorResp } = this.ctx.helper;
 
-      console.log('fgsgdfdg');
       const res = yield ctx.service.article.getAll();
       if (res) {
         ctx.body = formatSucceedResp(res);
@@ -95,7 +94,6 @@ module.exports = app => {
       const { ctx } = this;
       const { error, formatErrorResp, formatSucceedResp } = ctx.helper;
       const res = yield ctx.service.article.getContentById(ctx.request.body);
-      console.log(res)
       if (res) {
         ctx.body = formatSucceedResp(res);
       } else {
